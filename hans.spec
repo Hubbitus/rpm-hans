@@ -2,7 +2,7 @@
 
 Name:             hans
 Version:          1.0
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          IP over ICMP tunneling solution
 Group:            System Environment/Daemons
 
@@ -15,6 +15,8 @@ Source2:          %{name}-server.service
 Source3:          %{name}-client.sysconfig
 Source4:          %{name}-server.sysconfig
 Requires(pre):    shadow-utils
+# By default requires both client and server for easy installation. But you may install only server or client if desired
+Requires:         %{name}-server, %{name}-client
 
 %description
 Hans makes it possible to tunnel IPv4 through ICMP echo packets, so you could
@@ -101,6 +103,10 @@ getent passwd %{name} >/dev/null || useradd -r -s /sbin/nologin -c "IP over ICMP
 %{_unitdir}/%{name}-server.service
 
 %changelog
+* Mon May 01 2017 Pavel Alexeev <Pahan@Hubbitus.info> - 1.0-3
+- Requires both server and client sub-packages by default
+- Require set tunnel passwords manuallay by user and emit message with instructions.
+
 * Sat Jan 21 2017 Pavel Alexeev <Pahan@Hubbitus.info> - 1.0-2
 - Add %%{optflags}
 - Single %%pre for user creation

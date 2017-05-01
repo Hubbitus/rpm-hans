@@ -3,9 +3,10 @@ Description=IP over ICMP tunneling solution. Client
 After=syslog.target network.target
 
 [Service]
-Type=forking
+Type=idle
 EnvironmentFile=-/etc/sysconfig/hans-client
-ExecStart=/usr/sbin/hans $OPTIONS
+ExecStartPre=/usr/bin/bash -c '[ -n "$PASSWORD" ] || ( echo "You do not provide password for your tunnels! Please set value for PASSWORD in file /etc/sysconfig/hans-client (it must be same for client and server)" 1>&2 && exit 1 )'
+ExecStart=/usr/sbin/hans -p $PASSWORD $OPTIONS
 
 [Install]
 WantedBy=multi-user.target
